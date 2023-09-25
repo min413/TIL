@@ -80,7 +80,7 @@ id가 class보다 우선이라 red색이 적용됨
 }
 ```
 이렇게 another_class_tag가 나중에 선언된다면 black이 적용됨
-<br/>
+<br/> <br/>
 css에서 선언되는 순서가 영향이 있다
 
 ```css
