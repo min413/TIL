@@ -93,3 +93,20 @@ having 절은 **그룹화된** 결과 집합에 조건을 검사한다.
 
 ---
 
+### 오프라인/온라인 판매 데이터 통합하기
+https://school.programmers.co.kr/learn/courses/30/lessons/131537
+```mysql
+SELECT date_format(sales_date, '%Y-%m-%d') as sales_date, product_id, user_id, sales_amount
+from online_sale
+where date_format(sales_date, '%Y-%m-%d') between '2022-03-01' and '2022-03-31'
+union all
+select date_format(sales_date, '%Y-%m-%d') as sales_date, product_id, NULL, sales_amount
+from offline_sale
+where date_format(sales_date, '%Y-%m-%d') between '2022-03-01' and '2022-03-31'
+order by sales_date, product_id, user_id ;
+```
+union all은 쿼리 결과 값을 합쳐서 출력한다.  
+그냥 union은 중복을 제거하지만 union all은 중복도 허용하여 출력한다.  
+
+---
+
