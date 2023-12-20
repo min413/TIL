@@ -49,5 +49,18 @@ group by와 having 절, 그리고 두개의 테이블 join까지 모든 것을 �
 
 ---
 
+### 저자 별 카테고리 별 매출액 집계하기
+https://school.programmers.co.kr/learn/courses/30/lessons/144856
+```mysql
+SELECT B.author_id, A.author_name, B.category, sum(B.price * S.sales) as sales
+from book as B join author as A on B.author_id = A.author_id join book_sales as S on B.book_id = S.book_id
+where date_format(S.sales_date, '%Y-%m') = '2022-01'
+group by B.author_id, B.category
+order by B.author_id, B.category desc ;
+```
+sum()으로 합을 구해야 한다.  
+3개의 테이블을 join하였다.  
+date_format으로 2022년 1월을 지정했다.  
 
+---
 
