@@ -84,3 +84,41 @@ order by car_id desc ;
 case when ~ then ~ else ~ end 문법을 이용했다.  
 
 ---
+
+### 대여 횟수가 많은 자동차들의 월별 대여 횟수 구하기
+https://school.programmers.co.kr/learn/courses/30/lessons/151139
+```mysql
+SELECT month(start_date) as month, car_id, count(history_id) as records
+from CAR_RENTAL_COMPANY_RENTAL_HISTORY
+where car_id in (select car_id
+                from CAR_RENTAL_COMPANY_RENTAL_HISTORY
+                where month(start_date) in (8,9,10)
+                group by car_id
+                having count(history_id) >= 5)
+    and month(start_date) in (8,9,10)
+group by month, car_id
+having count(history_id) >= 1
+order by month, car_id desc ;
+```
+조건을 추가적으로 정의하기 위해 where 절에서 또 다른 sql문을 만들었다.  
+이거는 좀 어려워서 다시 풀어봐야 겠다 => 블로그에 작성하기  
+
+---
+
+### 식품분류별 가장 비싼 식품의 정보 조회하기
+https://school.programmers.co.kr/learn/courses/30/lessons/131116
+```mysql
+select category, price as max_price, product_name
+from food_product
+where (category, price) in (select category, max(price) as price
+                           from food_product
+                           where category in ('과자', '국', '김치', '식용유')
+                           group by category)
+order by max_price desc
+```
+이것도 마찬가지로 내부에 또 쿼리를 정리했다.  
+여기서는 식품분류가 '과자', '국', '김치', '식용유'인 경우가 따로 쿼리가 정의되었다.  
+이 쿼리에서 나온 것이 (category, price)로 in 을 이용해서 나온다.  
+
+---
+
