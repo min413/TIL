@@ -73,3 +73,40 @@ SELECT에서 집계함수를 사용할 때는 뭘 기준으로 할 것인지 알
 => group by 사용법을 인지하자 ( + having 절도)  
 
 ---
+
+### 재구매가 일어난 상품과 회원 리스트 구하기
+https://school.programmers.co.kr/learn/courses/30/lessons/131536
+```mysql
+SELECT user_id, product_id
+from online_sale
+group by user_id, product_id
+having count(*) >= 2
+order by user_id, product_id desc ;
+```
+having 절은 group by 절과 함께 사용되어 그룹화된 결과에 조건을 부여한다.  
+보통 having 절은 집계함수(count, sum, avg 등)과 함께 사용한다.  
+where 절과 비슷하게 조건을 부여하는 역할을 하지만,  
+where 절은 개별 레코드에 대한 조건,  
+having 절은 **그룹화된** 결과 집합에 조건을 검사한다.  
+
+여기서 user_id와 product_id를 그룹으로 만들어서 해당 그룹의 개수가 2 이상이면 출력하도록 했다.
+
+---
+
+### 오프라인/온라인 판매 데이터 통합하기
+https://school.programmers.co.kr/learn/courses/30/lessons/131537
+```mysql
+SELECT date_format(sales_date, '%Y-%m-%d') as sales_date, product_id, user_id, sales_amount
+from online_sale
+where date_format(sales_date, '%Y-%m-%d') between '2022-03-01' and '2022-03-31'
+union all
+select date_format(sales_date, '%Y-%m-%d') as sales_date, product_id, NULL, sales_amount
+from offline_sale
+where date_format(sales_date, '%Y-%m-%d') between '2022-03-01' and '2022-03-31'
+order by sales_date, product_id, user_id ;
+```
+union all은 쿼리 결과 값을 합쳐서 출력한다.  
+그냥 union은 중복을 제거하지만 union all은 중복도 허용하여 출력한다.  
+
+---
+
