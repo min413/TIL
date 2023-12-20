@@ -64,3 +64,23 @@ date_format으로 2022년 1월을 지정했다.
 
 ---
 
+### 자동차 대여 기록에서 대여중 / 대여 가능 여부 구분하기
+https://school.programmers.co.kr/learn/courses/30/lessons/157340
+```mysql
+SELECT car_id, 
+    case when car_id in (
+        select car_id
+        from car_rental_company_rental_history
+        where start_date <= '2022-10-16' and '2022-10-16' <= end_date
+        group by car_id
+        ) then '대여중'
+    else '대여 가능'
+    end as AVAILABILITY
+from car_rental_company_rental_history
+group by car_id
+order by car_id desc ;
+```
+특정 날짜에 있는 car_id가 있는지에 대한 내부 쿼리를 만들어서 in으로 처리한다.  
+case when ~ then ~ else ~ end 문법을 이용했다.  
+
+---
