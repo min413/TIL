@@ -122,3 +122,63 @@ order by max_price desc
 
 ---
 
+### 년, 월, 성별 별 상품 구매 회원 수 구하기
+https://school.programmers.co.kr/learn/courses/30/lessons/131532
+```mysql
+SELECT year(O.sales_date) as year, month(O.sales_date) as month, U.gender, count(distinct O.user_id) as users
+from user_info as U join online_sale as O on U.user_id = O.user_id
+where U.gender is not null
+group by year, month, U.gender
+order by year, month, U.gender ;
+```
+그룹으로 묶는 거에서 너무 머리아프게 생각했으나, 그냥 단순하게 년, 월, 성별로 그룹을 설정하면 된다.  
+
+---
+
+### 입양 시각 구하기(1)
+https://school.programmers.co.kr/learn/courses/30/lessons/59412
+```mysql
+SELECT hour(datetime) as hour, count(animal_id) as count
+from animal_outs
+where hour(datetime) between 9 and 19
+group by hour
+order by hour
+```
+처음에는 시간대별로 일일이 다 작성해줘야하나 생각했으나, 그냥 시간대 마다 group by 하면 된다.  
+
+---
+
+### 입양 시각 구하기(2)
+https://school.programmers.co.kr/learn/courses/30/lessons/59413
+```mysql
+with recursive rec as (
+    select 0 as num
+    union all
+    select num + 1
+    from rec
+    where num < 23
+)
+
+select rec.num as hour, count(hour(A.datetime)) as count
+from animal_outs as A right join rec on hour(A.datetime) = rec.num
+group by rec.num ;
+```
+지금까지 풀었던 것 중에 제일 낯선 풀이다.  
+with recursive라는 새로운 개념이 등장한다.  
+그리고 right join으로 해당 recursive에 맞게 join 해야 한다. 
+
+**이거는 꼭 블로그에 다시 작성해보자**
+
+---
+
+### 가격대 별 상품 개수 구하기
+https://school.programmers.co.kr/learn/courses/30/lessons/131530
+```mysql
+SELECT truncate(price, -4) as price_group, count(product_id) as products
+from product
+group by price_group
+order by price_group ;
+```
+truncate로 버림을 한다.  
+이때 꼭 어디서 버릴지 지정해야 하고, 마이너스는 정수쪽으로 올라간다.  
+
