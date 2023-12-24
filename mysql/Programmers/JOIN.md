@@ -69,3 +69,76 @@ member_id가 가장 자주 언급되는 것을 찾기 위해서 먼저 첫번째
 
 ---
 
+### 없어진 기록 찾기
+https://school.programmers.co.kr/learn/courses/30/lessons/59042
+```mysql
+SELECT O.animal_id, O.name
+from animal_ins as I right join animal_outs as O on I.animal_id = O.animal_id
+where I.animal_id is null ;
+```
+animal_outs에는 있고 animal_ins에는 없는 기록을 찾기 위해서 테이블끼리 join할 때 animal_outs로 join하고,  
+I.animal_id가 null인 경우의 id와 name을 출력하면 된다.  
+
+---
+
+### 있었는데요 없었습니다
+https://school.programmers.co.kr/learn/courses/30/lessons/59043
+```mysql
+SELECT I.animal_id, I.name
+from animal_ins as I join animal_outs as O on I.animal_id = O.animal_id
+where I.datetime > O.datetime
+order by I.datetime asc ;
+```
+날짜가 더 나중일수록 크다고 판단한다.  
+여기서 나는 date_format으로 날짜를 바꿔서 비교해봤으나 틀렸다.  
+그냥 있는 날짜 그대로 비교하면 된다.  
+
+---
+
+### 오랜 기간 보호한 동물(1)
+https://school.programmers.co.kr/learn/courses/30/lessons/59044
+```mysql
+SELECT I.name, I.datetime
+from animal_ins as I left join animal_outs as O on I.animal_id = O.animal_id
+where O.datetime is null
+order by I.datetime limit 3 ;
+```
+위의 "없어진 기록 찾기" 문제와 비슷하게 풀면 된다.  
+animal_outs에는 없고 animal_ins에만 있는 기록을 찾기 위해 테이블끼리 join할 때 animal_ins로 join한다.  
+=> 즉, 기록이 있는 쪽으로 join한다.  
+그리고 없는 쪽의 데이터가 is null 인것을 확인한다.  
+즉, O.datetime 이 is null일 때를 where 절에 넣는다.  
+
+---
+
+### 보호소에서 중성화한 동물
+https://school.programmers.co.kr/learn/courses/30/lessons/59045
+```mysql
+SELECT I.animal_id, I.animal_type, I.name
+from animal_ins as I join animal_outs as O on I.animal_id = O.animal_id
+where I.animal_id in (select animal_id
+                    from animal_ins
+                    where sex_upon_intake like 'Intact%')
+      and O.animal_id in (select animal_id
+                        from animal_outs
+                        where sex_upon_outcome like 'Spayed%' or sex_upon_outcome like 'Neutered%')
+order by I.animal_id ;
+```
+입양 들어갈 때의 성별이 Intact로 시작하는 animal_id가 있는지 in을 이용했고,  
+입양 나갔을 때의 성별이 Spayed 또는 Neutered로 시작하는 animal_id가 있는지도 in을 이용했다.  
+
+---
+
+### 상품을 구매한 회원 비율 구하기
+https://school.programmers.co.kr/learn/courses/30/lessons/131534
+```mysql
+SELECT year(S.sales_date) as year, month(S.sales_date) as month, count(distinct S.user_id) as puchased_users, round(count(distinct S.user_id) / (select count(*)
+                                            from user_info
+                                            where year(joined) = '2021'), 1) as puchased_ratio
+from user_info as I join online_sale as S on I.user_id = S.user_id
+where year(I.joined) = '2021'
+group by year(S.sales_date), month(S.sales_date)
+order by year, month ;
+```
+2021년에 구매한 사람 수 (online_sale 테이블에 있는 user_id 수)에서 user_info의 전체 사람 수를 나눈거를 round()로 관리한다.  
+이때 round()의 두번째 인자는 해당 숫자에서 반올림을 한다는 뜻이다.  
