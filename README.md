@@ -8,10 +8,5 @@
 ---
 
 ## MySQL
-- 프로그래머스 SQL 고득점 Kit
-  - [SELECT](https://github.com/min413/TIL/blob/main/mysql/Programmers/SELECT.md)
-  - [SUM_MAX_MIN](https://github.com/min413/TIL/blob/main/mysql/Programmers/SUM_MAX_MIN.md)
-  - [GROUP BY](https://github.com/min413/TIL/blob/main/mysql/Programmers/GROUP%20BY.md)
-  - [IS NULL](https://github.com/min413/TIL/blob/main/mysql/Programmers/IS%20NULL.md)
-  - [JOIN](https://github.com/min413/TIL/blob/main/mysql/Programmers/JOIN.md)
-  - [String Date](https://github.com/min413/TIL/blob/main/mysql/Programmers/String%20Date.md)
+- [프로그래머스 SQL 고득점 Kit](https://github.com/min413/TIL/tree/main/mysql/Programmers)
+- [프로그래머스 알고리즘 고득점 kit](https://github.com/min413/TIL/tree/main/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EA%B3%A0%EB%93%9D%EC%A0%90%20Kit)
