@@ -198,3 +198,17 @@ order by cart_id;
 having count(distinct name) >= 2이 가장 중요한 핵심이다.  
 중복되지 않고 2개 이상이 가져야 한다.  
 
+---
+
+### 헤비 유저가 소유한 장소
+https://school.programmers.co.kr/learn/courses/30/lessons/77487
+```mysql
+SELECT id, name, host_id
+from places
+where host_id in (select host_id
+                 from places
+                 group by host_id
+                 having count(*) >= 2)
+order by id;
+```
+host_id로 서브쿼리를 만들어서 group by로 host_id를 하고 having으로 2개 이상인 경우를 설정한다.  
