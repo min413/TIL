@@ -182,3 +182,19 @@ order by price_group ;
 truncate로 버림을 한다.  
 이때 꼭 어디서 버릴지 지정해야 하고, 마이너스는 정수쪽으로 올라간다.  
 
+---
+
+### 우유와 요거트가 담긴 장바구니
+https://school.programmers.co.kr/learn/courses/30/lessons/62284
+```mysql
+SELECT cart_id
+from cart_products
+where name in ('Milk', 'Yogurt')
+group by cart_id
+having count(distinct name) >= 2
+order by cart_id;
+```
+문제의 의도는 Milk와 Yogurt가 동시에 가지는 cart_id를 골라야 하므로,  
+having count(distinct name) >= 2이 가장 중요한 핵심이다.  
+중복되지 않고 2개 이상이 가져야 한다.  
+
